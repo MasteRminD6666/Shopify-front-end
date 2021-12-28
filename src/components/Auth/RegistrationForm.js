@@ -8,9 +8,9 @@ function Registration(props) {
   ]
 
 
-// this switcher for to change login state 
+  // this switcher for to change login state 
 
-//TODO pasword confamariton
+  //TODO pasword confamariton
   return (
     <>
       {!props.loggedIn && ( //true
@@ -18,13 +18,13 @@ function Registration(props) {
           <div className="form">
             {props.switcher && ( //false
               <form onSubmit={props.handleSubmit} className="login-form">
-                <input type="email"  name="email" placeholder="email"  required/>
+                <input type="email" name="email" placeholder="email" required />
                 <input type="text" name="username" placeholder="username" required />
-                <input type="password" name="password" placeholder="password"required />
+                <input type="password" name="password" placeholder="password" required />
                 <Form.Select onChange={props.handleDropdownChange}  >
-                <option value="" disabled selected>Select your role</option>
+                  <option value="" disabled selected>Select your role</option>
                   {roles.map((role) => {
-                  return <option name ="role" value={role.value} required >{role.label}</option>
+                    return <option name="role" value={role.value} required >{role.label}</option>
                   })}
                 </Form.Select>
                 <br></br>
@@ -35,13 +35,13 @@ function Registration(props) {
                     Sign In
                   </a>
                 </p>
-             
+
               </form>
             )}
             {!props.switcher && (
               <form className="login-form" onSubmit={props.handleLogin}>
-                <input type="text"  name="username" placeholder="username" required/>
-                <input type="password"  name="password" placeholder="password"required />
+                <input type="text" name="username" placeholder="username" required />
+                <input type="password" name="password" placeholder="password" required />
                 <button>login</button>
                 <p className="message">
                   Not registered?{' '}
