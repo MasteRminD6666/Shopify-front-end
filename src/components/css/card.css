@@ -1,0 +1,19 @@
+.home{
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    justify-content: center;
+
+    
+    }
+    
+    .center{
+        margin-top: 100px
+    }
+    .ıtems{
+        color: red;
+        display: flex;
+        align-items: center;
+        flex-direction: space-between  ;
+        justify-content: space-between  ;
+    }
