@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import axios from 'axios';
 import Modalform from './Modal'
-import { Card, Button, Col, Row, Container, Modal, Form } from 'react-bootstrap';
+import { Card, Button, Col, Row, Container } from 'react-bootstrap';
 import '../css/card.css';
 
 function Buyer(props) {
@@ -23,10 +23,10 @@ function Buyer(props) {
                 }
             })
                 .then((result) => {
-                  
+
                     setData(result.data)
 
-                  
+
                 }).catch((error) => {
                     console.log(error);
                 })
@@ -38,13 +38,13 @@ function Buyer(props) {
         <>
             <Container>
                 <Row xs={3} md={3}>
-                    {data.map((result) => {
+                    {data.map((result, index) => {
                         return (
                             <>
-                                <div className="home">
+                                <div className="home" key={result._id}>
                                     <div className="center">
-                                        <Col>
-                                            <Card style={{ width: '18rem' }}>
+                                        <Col >
+                                            <Card style={{ width: '18rem' }} >
                                                 <Card.Body>
                                                     <Card.Title> {result.username}</Card.Title>
                                                     <Card.Text>
@@ -55,6 +55,7 @@ function Buyer(props) {
                                                             show={show}
                                                         ></Modalform>
                                                     </Card.Text>
+                                                    
                                                     <Button variant="outline-success" onClick={handleShow}>Book Appointment</Button>
                                                 </Card.Body>
                                             </Card>
