@@ -6,7 +6,13 @@ import NavDropdown from 'react-bootstrap/NavDropdown';
 import Form from 'react-bootstrap/Form';
 import FormControl from 'react-bootstrap/FormControl';
 import Button from 'react-bootstrap/Button';
-function Header() {
+import store  from './reducers/store';
+function Header(props) {
+    function logout() { 
+        localStorage.clear();
+        store.dispatch({type: 'REST'})
+        props.setLoggedIn(false)
+     }
 
     return (
         <>
@@ -20,18 +26,11 @@ function Header() {
                             style={{ maxHeight: '100px' }}
                             navbarScroll
                         >
-                            <Nav.Link href="#action1">Home</Nav.Link>
-                            <Nav.Link href="#action2">Book</Nav.Link>
-                           
+                            {/* Add status page later to track appointment status */}
+                            <Nav.Link href="#action1">Status</Nav.Link>      
                         </Nav>
-                        <Form className="d-flex">
-                            <FormControl
-                                type="search"
-                                placeholder="Search"
-                                className="me-2"
-                                aria-label="Search"
-                            />
-                            <Button variant="outline-success">Search</Button>
+                        <Form className="d-flex">  
+                            <Button variant="outline-danger" onClick={logout}>Logout</Button>
                         </Form>
                     </Navbar.Collapse>
                 </Container>

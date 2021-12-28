@@ -1,27 +1,26 @@
 import Header from './components/Header';
-import React, { useState,useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import LoginForm from './components/Auth/RegistrationForm';
 import axios from 'axios';
 import Swal from 'sweetalert2';
-function App() {
-
-  let [role, setRole] = useState('');
-  let [loggedIn, setloggedIn] = useState(false);
-  let [switcher, setSwitcher] = useState(false);
- 
-
-
+import { connect } from 'react-redux';
+import store from './components/reducers/store';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { If, Else, Then, } from 'react-if';
+import Home from './components/Home'
+function App(props) {
+  const [role, setRole] = useState('');
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [switcher, setSwitcher] = useState(false);
   useEffect(() => {
-    setloggedIn(JSON.parse(window.localStorage.getItem('Token')))
-    console.log(loggedIn);
-  
+    store.dispatch({
+      type: 'SET_USER_TOKEN',
+      payload: JSON.parse(window.localStorage.getItem('Token'))
+    })
   }, [])
-
   function switchBtn(e) {
     setSwitcher(e)
   }
-
-  
   function handleSubmit(e) {
     e.preventDefault();
     let registerData = {
@@ -31,7 +30,7 @@ function App() {
       role: role,
     }
     axios.post('http://localhost:3001/signup', registerData).then((result) => {
-      console.log(result.data);
+    ;
     }).catch(e => {
       console.log(e.message);
     })
@@ -45,54 +44,81 @@ function App() {
     })
     switchBtn(false)
   }
-  function handleLogin(e){
+  async function handleLogin(e) {
     e.preventDefault();
     let LoginData = {
       username: e.target.username.value,
       password: e.target.password.value,
-    
     }
-    axios.post('http://localhost:3001/signin', LoginData).then((result) => {
-      const accessToken = result.data
-      console.log(result.data);
+    await axios.post('http://localhost:3001/signin', LoginData).then((result) => {
+      const accessToken = result.data.accessToken
+      if (!accessToken) {
+        return
+      }
+      store.dispatch({
+        type: 'SET_USER_TOKEN',
+        payload: accessToken
+      })
       window.localStorage.setItem('Token', JSON.stringify(accessToken));
+  
+      //TODO logiend
     }).catch(e => {
       console.log(e.message);
     })
-    console.log(loggedIn);
-    if (loggedIn) {
+    let token
+    let tokenstoarge = window.localStorage.getItem('Token')
+    if (tokenstoarge) {
+      token = JSON.parse(window.localStorage.getItem('Token'));
+    }
+    if (token) {
+      setLoggedIn(true)
       Swal.fire({
         position: 'center',
         icon: 'success',
-        title: 'Your account created successfully',
+        title: 'You logged in successfully',
         showConfirmButton: false,
         timer: 1500
       })
-    }else{
+    } if (!token || token == undefined) {
       Swal.fire({
         icon: 'error',
         title: 'Oops...',
         text: 'username or password is incorrect',
       })
     }
+    console.log(loggedIn);
   }
   function handleDropdownChange(e) {
     setRole(e.target.value)
   }
+
+  {/*  */ }
   return (
     <>
-      <LoginForm
-        handleSubmit={handleSubmit}
-        handleDropdownChange={handleDropdownChange}
-        handleLogin={handleLogin}
-        switchBtn ={switchBtn}
-        loggedIn = {loggedIn}
-        switcher= {switcher}
-
-      />
-
+      <div >
+        <BrowserRouter>
+          <If condition={!props.userToken}>
+            <Then>
+              <LoginForm
+                handleSubmit={handleSubmit}
+                handleDropdownChange={handleDropdownChange}
+                handleLogin={handleLogin}
+                switchBtn={switchBtn}
+                loggedIn={loggedIn}
+                switcher={switcher}
+                Token={props.userToken} />
+            </Then>
+            <Else>
+              <Header
+                setLoggedIn={setLoggedIn} />
+              <Home></Home>
+            </Else>
+          </If>
+        </BrowserRouter>
+      </div>
     </>
   );
 }
-
-export default App;
+export default connect(function (state) {
+  return state
+})(App) 

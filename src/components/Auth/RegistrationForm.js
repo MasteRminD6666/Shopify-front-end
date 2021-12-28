@@ -1,24 +1,27 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import './login.css';
 import Form from 'react-bootstrap/Form';
-
 function Registration(props) {
   let roles = [
     { label: 'Buyer', value: 1 },
     { label: 'Seller', value: 2 },
   ]
+
+
 // this switcher for to change login state 
+
+//TODO pasword confamariton
   return (
     <>
-      {!props.loggedIn && (
+      {!props.loggedIn && ( //true
         <div className="login-page">
           <div className="form">
-            {props.switcher && (
+            {props.switcher && ( //false
               <form onSubmit={props.handleSubmit} className="login-form">
                 <input type="email"  name="email" placeholder="email"  required/>
                 <input type="text" name="username" placeholder="username" required />
                 <input type="password" name="password" placeholder="password"required />
-                <Form.Select onChange={props.handleDropdownChange}>
+                <Form.Select onChange={props.handleDropdownChange}  >
                 <option value="" disabled selected>Select your role</option>
                   {roles.map((role) => {
                   return <option name ="role" value={role.value} required >{role.label}</option>
